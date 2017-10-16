@@ -1,0 +1,26 @@
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+project.ext {
+    configPath = "$rootProject.projectDir/configuration/"
+    dropwizardVersion = '0.8.2'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+}
+
+mainClassName = "uk.gov.ida.beam.BeamApplication"
+
+
+run {
+//    args = ["server", "configuration/app-config.yml"]
+
+    args 'server', configPath + 'app-config.yml'
+
+}

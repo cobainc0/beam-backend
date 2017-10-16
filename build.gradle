@@ -1,4 +1,5 @@
 apply plugin: 'application'
+apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
@@ -12,15 +13,22 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+
+    compile(
+    'com.yammer.metrics:metrics-core:2.2.0',
+    'io.dropwizard:dropwizard-core:'+dropwizardVersion
+    )
+
+    testCompile(
+            'junit:junit:4.12',
+            'io.dropwizard:dropwizard-testing:1.1.0'
+    )
+
 }
 
-mainClassName = "uk.gov.ida.beam.BeamApplication"
+mainClassName = "com.cobainc0.beam.BeamApplication"
 
 
 run {
-//    args = ["server", "configuration/app-config.yml"]
-
-    args 'server', configPath + 'app-config.yml'
-
+    args = ["server", configPath+"app-config.yml"]
 }

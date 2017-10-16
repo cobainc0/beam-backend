@@ -14,4 +14,6 @@ logging:
     - type: file
       currentLogFilename: logs/beam-client.log
       archivedLogFilenamePattern: logs/beam-client.log.%d.gz
-appName: Beam Frontend
+appName: Beam Frontend app name
+template: Beam template name
+defaultName: Beam default name

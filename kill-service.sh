@@ -8,6 +8,6 @@ then
 	kill -9 $GID &&
 	echo "Killing Gradle Application" &&
 	kill -9 $BID &&
-	echo "Killing Beam Application" &&
+	echo "Killing Beam Application"
 fi
 

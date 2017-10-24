@@ -9,6 +9,17 @@ public class BeamConfiguration extends Configuration {
     @NotEmpty
     private String appName;
 
+    @NotEmpty
+    private String defaultName;
+
+    @NotEmpty
+    private String template;
+
+    @NotEmpty
+    private String adminPassword;
+
+
+
     @JsonProperty
     public String getAppName() {
         return this.appName;
@@ -19,8 +30,6 @@ public class BeamConfiguration extends Configuration {
         this.appName = appName;
     }
 
-    @NotEmpty
-    private String template;
 
     @JsonProperty
     public String getTemplate(){
@@ -32,8 +41,6 @@ public class BeamConfiguration extends Configuration {
         this.template = template;
     }
 
-    @NotEmpty
-    private String defaultName;
 
     @JsonProperty
     public String getDefaultName(){
@@ -43,6 +50,16 @@ public class BeamConfiguration extends Configuration {
     @JsonProperty
     public void setDefaultName(String defaultName){
         this.defaultName = defaultName;
+    }
+
+    @JsonProperty
+    public String getAdminPassword(){
+        return adminPassword;
+    }
+
+    @JsonProperty
+    public void setAdminPassword(String adminPassword){
+        this.adminPassword = adminPassword;
     }
 }
 

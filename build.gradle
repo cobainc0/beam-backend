@@ -6,6 +6,7 @@ sourceCompatibility = 1.8
 project.ext {
     configPath = "$rootProject.projectDir/configuration/"
     dropwizardVersion = '0.8.2'
+    jerseyVersion = '2.19'
 }
 
 repositories {
@@ -15,14 +16,23 @@ repositories {
 dependencies {
 
     compile(
-    'com.yammer.metrics:metrics-core:2.2.0',
-    'io.dropwizard:dropwizard-core:'+dropwizardVersion
+            'com.yammer.metrics:metrics-core:2.2.0',
+            'io.dropwizard:dropwizard-core:'+dropwizardVersion,
+            'io.dropwizard:dropwizard-auth:'+dropwizardVersion
     )
 
     testCompile(
             'junit:junit:4.12',
-            'io.dropwizard:dropwizard-testing:1.1.0'
+            'io.dropwizard:dropwizard-testing:1.1.0',
+            'org.skyscreamer:jsonassert:1.5.0' //json assert
     )
+
+    testCompile('org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:'+jerseyVersion)
+            {
+                //non io blocking test framework plus server)
+                exclude group: 'junit'
+                exclude group: 'javax.servlet'
+            }
 
 }
 

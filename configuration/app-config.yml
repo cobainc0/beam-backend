@@ -2,6 +2,11 @@ server:
   applicationConnectors:
     - type: http
       port: 53000
+    - type: https
+      port: 8443
+      keyStorePath: beam.keystore
+      keyStorePassword: pa55word
+      validateCerts: false
   adminConnectors:
     - type: http
       port: 53001
@@ -9,7 +14,7 @@ server:
 logging:
   level: INFO
   loggers:
-    "uk.gov": DEBUG
+    "com.cobainc0": DEBUG
   appenders:
     - type: file
       currentLogFilename: logs/beam-client.log
@@ -17,3 +22,4 @@ logging:
 appName: Beam Frontend app name
 template: Beam template name
 defaultName: Beam default name
+adminPassword: pa55word

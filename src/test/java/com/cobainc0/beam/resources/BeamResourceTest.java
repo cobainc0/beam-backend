@@ -1,11 +1,11 @@
 package com.cobainc0.beam.resources;
 
+import com.cobainc0.beam.auth.BeamAuthoriser;
 import com.cobainc0.beam.core.User;
-import com.google.common.base.Optional;
-import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
-import io.dropwizard.auth.basic.BasicAuthFactory;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -25,9 +25,9 @@ public class BeamResourceTest {
     private static final Authenticator<BasicCredentials, User> STUB_AUTHENTICATOR =
             new Authenticator<BasicCredentials, User>() {
                 @Override
-                public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-                    return Optional.of(new User());
-                }
+                public java.util.Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
+                         return java.util.Optional.of(new User());
+                  }
             };
 
     //jersey client feature
@@ -46,11 +46,13 @@ public class BeamResourceTest {
     @ClassRule//start/stop app
     public static final ResourceTestRule TEST_RULE_FOR_API_TEST_CLASS = ResourceTestRule
             .builder()
-            .addProvider(AuthFactory.binder(new BasicAuthFactory<>(
-                    STUB_AUTHENTICATOR,
-                    "test secure realm",
-                    User.class
-            )))
+            .addProvider(new AuthDynamicFeature(
+                    new BasicCredentialAuthFilter.Builder<User>()
+                            .setAuthenticator(STUB_AUTHENTICATOR)
+                            .setAuthorizer(new BeamAuthoriser())
+                            .setRealm("SUPER SECRET STUFF")
+                            .buildAuthFilter())
+            )
             .setTestContainerFactory(
                     new GrizzlyWebTestContainerFactory()
             )
@@ -83,7 +85,7 @@ public class BeamResourceTest {
     }
 
     @Test
-    public void getAuthentication() throws Exception{
+    public void getAuthentication(){
          String expected = "Hello secured world";
          String actual = TEST_RULE_FOR_API_TEST_CLASS
                  .getJerseyTest()

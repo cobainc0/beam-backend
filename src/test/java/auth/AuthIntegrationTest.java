@@ -8,6 +8,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.net.ssl.SSLContext;
@@ -20,14 +21,14 @@ import static org.junit.Assert.assertEquals;
 
 public class AuthIntegrationTest {
 
-    private static final String CONFIG_PATH = "configuration/app-config.yml";
+    private static final String CONFIG_PATH = "src/dist/app-config.yml";
     private static final String HTTP_TARGET = "http://localhost:53000";
     private static final String HTTPS_TARGET = "https://localhost:8443";
     private static final String PATH_TO_SECURE_API = "/api/secured";
     private Client client;
 
     private static final HttpAuthenticationFeature AUTHENTICATION_FEATURE =
-            HttpAuthenticationFeature.basic("coba", "pa55word");
+            HttpAuthenticationFeature.basic("coba", "gd");
 
 
 
@@ -57,7 +58,7 @@ public class AuthIntegrationTest {
 
 // client without SSL configuration & context
 //    @Before
-//    public void setUp(){
+//    public void setUpWithoutSSL(){
 //        client = ClientBuilder.newClient();
 //    }
 
@@ -66,9 +67,9 @@ public class AuthIntegrationTest {
         client.close();
     }
 
-    @Test
+     @Test
     public void testSadPath(){ //expect 401
-        int expectedCode = Response.Status.UNAUTHORIZED.getStatusCode();
+        int expectedStatusCode = Response.Status.UNAUTHORIZED.getStatusCode();
 
         //actual response
         Response response = client
@@ -79,14 +80,16 @@ public class AuthIntegrationTest {
 
         int actualCode = response.getStatus();
 
-        assertEquals(expectedCode, actualCode);
+        assertEquals(expectedStatusCode, actualCode);
     }
 
     @Test
     public void testHappy(){
         String expectedText = "Hello secured world";
 
-        client.register(AUTHENTICATION_FEATURE); // add Authentication resource
+        client.register(
+                AUTHENTICATION_FEATURE
+        ); // add Authentication resource
 
         //actual response
         String responseText = client

@@ -1,0 +1,1 @@
+Main-Class: com.cobainc0.beam.BeamApplication

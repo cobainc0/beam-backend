@@ -1,13 +1,16 @@
 apply plugin: 'application'
 apply plugin: 'java'
 
+
 sourceCompatibility = 1.8
 
 project.ext {
     configPath = "$rootProject.projectDir/configuration/"
-    dropwizardVersion = '0.8.2'
+    dropwizardVersion = '1.1.4'
     jerseyVersion = '2.19'
 }
+
+mainClassName = "com.cobainc0.beam.BeamApplication"
 
 repositories {
     mavenCentral()
@@ -18,7 +21,10 @@ dependencies {
     compile(
             'com.yammer.metrics:metrics-core:2.2.0',
             'io.dropwizard:dropwizard-core:'+dropwizardVersion,
-            'io.dropwizard:dropwizard-auth:'+dropwizardVersion
+            'io.dropwizard:dropwizard-auth:1.2.0',
+            'io.dropwizard:dropwizard-hibernate:'+dropwizardVersion,
+            'mysql:mysql-connector-java:5.1.36',
+
     )
 
     testCompile(
@@ -36,9 +42,19 @@ dependencies {
 
 }
 
-mainClassName = "com.cobainc0.beam.BeamApplication"
+// Configure the jar task to build a fat jar
+jar {
+    from {
+        (configurations.compile).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 
+    manifest {
+        attributes("Main-Class": mainClassName)
+    }
+}
 
 run {
-    args = ["server", configPath+"app-config.yml"]
+    args = ["server", "./src/dist/app-config.yml"]
 }

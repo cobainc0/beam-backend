@@ -34,7 +34,7 @@ public class BeamResource {
         return new Response(r);
     }
 
-    @Path("secured") //sub resource meth
+    @Path("secured") //sub resource method
     @Produces(MediaType.TEXT_PLAIN)
     @GET
     //prompt user for password

@@ -1,5 +1,6 @@
 apply plugin: 'application'
 apply plugin: 'java'
+apply plugin: 'distribution'
 
 
 sourceCompatibility = 1.8

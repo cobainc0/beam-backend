@@ -11,6 +11,7 @@ import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -25,7 +26,7 @@ public class BeamApplication extends Application<BeamConfiguration> {
    private final HibernateBundle<BeamConfiguration> hibernateORM = new HibernateBundle<BeamConfiguration>(User.class) {
 
        @Override
-       public DataSourceFactory getDataSourceFactory(BeamConfiguration configuration) {
+       public PooledDataSourceFactory getDataSourceFactory(BeamConfiguration configuration) {
            return configuration.getDataSourceFactory();
        }
    };
@@ -84,6 +85,8 @@ public class BeamApplication extends Application<BeamConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
 
-        //debugging - throw new BeamException("MSG: BEAM EXCEPTION", new Throwable("CAUSE: BEAM CAUSE"));
+        final PersonDAO dao = new PersonDAO(hibernateORM.getSessionFactory());
+        environment.jersey().register(new UserResource(dao));
     }
+        //debugging - throw new BeamException("MSG: BEAM EXCEPTION", new Throwable("CAUSE: BEAM CAUSE"));
 }

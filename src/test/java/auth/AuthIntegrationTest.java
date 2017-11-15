@@ -8,7 +8,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.net.ssl.SSLContext;
@@ -28,7 +27,7 @@ public class AuthIntegrationTest {
     private Client client;
 
     private static final HttpAuthenticationFeature AUTHENTICATION_FEATURE =
-            HttpAuthenticationFeature.basic("coba", "gd");
+            HttpAuthenticationFeature.basic("coba", "pa55word");
 
 
 

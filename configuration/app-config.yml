@@ -12,10 +12,11 @@ server:
       port: 53001
 
 logging:
-  level: DEBUG
+  level: INFO
   loggers:
-    "com.cobainc0": DEBUG
+    com.cobainc0: DEBUG
   appenders:
+    - type: console
     - type: file
       currentLogFilename: logs/beam-client.log
       archivedLogFilenamePattern: logs/beam-client.log.%d.gz
@@ -26,5 +27,5 @@ adminPassword: pa55word
 database:
   driverClass: com.mysql.jdbc.Driver
   user: root
-  url: jdbc:mysql://localhost:3306/Beam
-  password: 1
+  url: jdbc:mysql://localhost:3306/beam
+  password: pa55word

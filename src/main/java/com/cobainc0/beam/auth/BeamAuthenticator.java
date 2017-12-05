@@ -19,34 +19,10 @@ public class BeamAuthenticator
 
     @Override
     public java.util.Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-        if ((config.getAdminPassword()).equals("pa55word")) {
+        if ((config.getAdminPassword()).equals(credentials.getPassword())) {
                 return java.util.Optional.of(new User());
             }
             return java.util.Optional.empty();
     }
 
-//    @Override
-//    public java.util.Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-//        if ((config.getAdminPassword()).equals(credentials.getPassword())) {
-//            return java.util.Optional.of(new User());
-//        }
-//        return java.util.Optional.empty();
-//    }
-
-//         public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-//            if ("secret".equals(credentials.getPassword())) {
-//                return Optional.of(new User(credentials.getUsername()));
-//            }
-//            return Optional.absent();
-//        }
-
- //searches [db] for matching credentials and returns a User, as defined above
-//    @Override
-//    public Optional<User> authenticate(BasicCredentials credentials)  throws AuthenticationException {
-//        if ((config.getAdminPassword()).equals(credentials.getPassword())) {
-//            return Optional.of(new User(credentials.getUsername()));
-//        } else {
-//            return Optional.absent(); //empty Guava Optional
-//        }
-//    }
 }

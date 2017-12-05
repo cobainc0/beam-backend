@@ -10,7 +10,6 @@ public class User implements Principal {
     private String password;
 
     public User(){
-        //default name for user - test
         this.name = "cherry v";
         this.password = "pa55word";
         this.role = "admin";
@@ -19,16 +18,16 @@ public class User implements Principal {
         this.name = username;
     }
 
+    public User(String username, String password){ this.name = username; this.password = password; }
+
     public String getRole() {
         return role;
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
-     public String getPassword() {
+    public String getPassword() {
         return password;
     }
 }

@@ -3,53 +3,52 @@ package com.cobainc0.beam;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class BeamConfiguration extends Configuration {
 
-    @NotEmpty
+    @NotNull
     private String appName;
 
-    @NotEmpty
+    @NotNull
     private String defaultName;
 
-    @NotEmpty
+    @NotNull
     private String template;
 
-    @NotEmpty
+    @NotNull
     private String adminPassword;
 
-    //database password
+    //dataSourceFactory password
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // will skip it during serialization
     private String password = null;
 
-    //database
+    //dataSourceFactory
     @Valid
     @NotNull
-    private DataSourceFactory database = new DataSourceFactory();
+    private DataSourceFactory dataSourceFactory = new DataSourceFactory();
 
-    //database
+    //dataSourceFactory
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
-        return database;
+        return dataSourceFactory;
     }
 
-    //database
+    //dataSourceFactory
     @JsonProperty
-    public void setDatabase(DataSourceFactory database) {
-        this.database = database;
+    public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
+        this.dataSourceFactory = dataSourceFactory;
     }
 
-    //database
+    //dataSourceFactory
     @JsonProperty
     public void setPassword(String password){
         this.password = password;
     }
 
-    //database
+    //dataSourceFactory
 //    @JsonProperty
 //    public String getPassword() {
 //        return password;

@@ -20,7 +20,8 @@ import static org.junit.Assert.assertEquals;
 
 public class AuthIntegrationTest {
 
-    private static final String CONFIG_PATH = "src/dist/app-config.yml";
+    private static final String CONFIG_DIST_PATH = "src/dist/app-config.yml";
+    private static final String CONFIG_PATH = "configuration/app-config.yml";
     private static final String HTTP_TARGET = "http://localhost:53000";
     private static final String HTTPS_TARGET = "https://localhost:8443";
     private static final String PATH_TO_SECURE_API = "/api/secured";
@@ -38,7 +39,7 @@ public class AuthIntegrationTest {
 
     @ClassRule
     public static final DropwizardAppRule<BeamConfiguration> RULE
-            = new DropwizardAppRule<BeamConfiguration>(BeamApplication.class, CONFIG_PATH);
+            = new DropwizardAppRule<BeamConfiguration>(BeamApplication.class, CONFIG_DIST_PATH);
 
     //allow tests to accept SSL/HTTPS - without a cert
     @Before

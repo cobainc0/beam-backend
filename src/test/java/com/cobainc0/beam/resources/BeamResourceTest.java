@@ -32,10 +32,9 @@ public class BeamResourceTest {
 
     //jersey client feature
    private static final HttpAuthenticationFeature FEATURE
-           = HttpAuthenticationFeature.basic("u", "p");
+           = HttpAuthenticationFeature.basic("user", "pa55wordv");
 
-    //use credentials for each method
-    @BeforeClass
+   @BeforeClass
     public static void setUpClass(){
         TEST_RULE_FOR_API_TEST_CLASS
                 .getJerseyTest()
@@ -43,7 +42,7 @@ public class BeamResourceTest {
                 .register(FEATURE);
     }
 
-    @ClassRule//start/stop app
+   @ClassRule//start/stop app
     public static final ResourceTestRule TEST_RULE_FOR_API_TEST_CLASS = ResourceTestRule
             .builder()
             .addProvider(new AuthDynamicFeature(
@@ -60,9 +59,8 @@ public class BeamResourceTest {
             .build();
 
 
-
      @Test
-     public void getPassingRule() throws Exception{
+     public void getPassingRule(){
         String expected = "{\"status\":\"pass\"}";
         String actual = TEST_RULE_FOR_API_TEST_CLASS
                 .getJerseyTest() //Jersey test class - connects to jersey resource
@@ -74,7 +72,7 @@ public class BeamResourceTest {
 
 
     @Test
-    public void getSaySomething() throws Exception {
+    public void getSaySomething() {
         String expected = "Sshh";
         String actual = TEST_RULE_FOR_API_TEST_CLASS
                 .getJerseyTest()
@@ -85,7 +83,7 @@ public class BeamResourceTest {
     }
 
     @Test
-    public void getAuthentication(){
+    public void getAuthenticationText(){
          String expected = "Hello secured world";
          String actual = TEST_RULE_FOR_API_TEST_CLASS
                  .getJerseyTest()

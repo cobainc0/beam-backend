@@ -22,21 +22,18 @@ dependencies {
     compile(
             "io.dropwizard:dropwizard-core:${dropwizardVersion}",
             "io.dropwizard:dropwizard-auth:${dropwizardVersion}",
-            "io.dropwizard:dropwizard-hibernate:${dropwizardVersion}",
+            "io.dropwizard:dropwizard-jdbi:${dropwizardVersion}",
             "io.dropwizard:dropwizard-migrations:${dropwizardVersion}",
             "io.dropwizard:dropwizard-views-mustache:${dropwizardVersion}",
             "mysql:mysql-connector-java:5.1.36"
-//            "com.palantir.config.crypto:encrypted-config-value-bundle:0.1.8",
-//            "com.palantir.config.crypto:encrypted-config-value:0.1.8",
-//            "com.fasterxml.jackson.core:jackson-databind:2.6.1",
-//            "com.google.guava:guava:18.0"
 
     )
 
     testCompile(
             "junit:junit:4.12",
             "io.dropwizard:dropwizard-testing:${dropwizardVersion}",
-            "org.skyscreamer:jsonassert:1.5.0" //json assert
+            "org.skyscreamer:jsonassert:1.5.0", //json assert
+            "com.h2database:h2:1.4.190"//for db rel testing
     )
 
     testCompile(
@@ -44,7 +41,7 @@ dependencies {
     )
             {
                 //non io blocking test framework plus server)
-                exclude group: 'junit'
+//                exclude group: 'junit'
                 exclude group: 'javax.servlet'
             }
 

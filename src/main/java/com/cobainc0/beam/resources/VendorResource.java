@@ -1,10 +1,9 @@
 package com.cobainc0.beam.resources;
 
 import com.cobainc0.beam.core.Vendor;
-import com.cobainc0.beam.core.VendorDA0;
-import io.dropwizard.hibernate.UnitOfWork;
-import com.google.common.base.Optional;
+import com.cobainc0.beam.core.VendorDAO;
 import io.dropwizard.jersey.params.LongParam;
+import io.dropwizard.jersey.params.NonEmptyStringParam;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,34 +14,43 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("vendor")
-@Produces(MediaType.APPLICATION_JSON)
-
-
 public class VendorResource {
 
-    private VendorDA0 vendorDA0;
+    private VendorDAO vendorDA0;
 
-    public VendorResource(VendorDA0 vendorDAO){
+    public VendorResource(VendorDAO vendorDAO){
         this.vendorDA0 = vendorDAO;
     }
 
-
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
     @GET
-    @UnitOfWork
-    public List<Vendor> findByName(@QueryParam("vendorName") Optional<String> vendorName){
-        if(vendorName.isPresent()){
-            return vendorDA0.findByName(vendorName.get());
-        }else{
-            return vendorDA0.findAll();
-        }
+    public List<Vendor> findByName(@QueryParam("name") String name) {
+        StringBuilder builder = new StringBuilder("%");
+        String searchName = String.valueOf(builder.append(name).append("%"));
+        return vendorDA0.findByVendorName(searchName);
+    }
+//
+//    @Path("/query")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @GET
+//    public List<Vendor> findByPostcode(@QueryParam("postcode") String postcode){
+//        StringBuilder builder = new StringBuilder("%");
+//        String searchPostcode = String.valueOf(builder.append(postcode).append("%"));
+//        return vendorDA0.findByPostcode(searchPostcode);
+//    }
+
+    @Path("all")
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    public List<Vendor> findAll(){
+        return vendorDA0.findAll();
     }
 
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @GET
-    @UnitOfWork
-    @Path("/{vendorId}")
-    public Optional<Vendor> getById(@PathParam("vendorId") LongParam id){
-        return vendorDA0.getById(id.get());
+    public List<Vendor> findById(@PathParam("id") LongParam id) {
+        return vendorDA0.findById(id.get());
     }
-
-
 }

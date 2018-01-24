@@ -1,5 +1,3 @@
-package auth;
-
 import com.cobainc0.beam.BeamApplication;
 import com.cobainc0.beam.BeamConfiguration;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -18,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
 
-public class AuthIntegrationTest {
+public class BeamAuthenticationIntegrationTest {
 
     private static final String CONFIG_DIST_PATH = "src/dist/app-config.yml";
     private static final String CONFIG_PATH = "configuration/app-config.yml";
@@ -30,8 +28,6 @@ public class AuthIntegrationTest {
     private static final HttpAuthenticationFeature AUTHENTICATION_FEATURE =
             HttpAuthenticationFeature.basic("coba", "pa55word");
 
-
-
     //used to enable SSLConnection
     private static final String HTTPS_KEYSTORE = "beam.keystore";
     private static final String HTTPS_PASSWORD = "pa55word";
@@ -41,26 +37,11 @@ public class AuthIntegrationTest {
     public static final DropwizardAppRule<BeamConfiguration> RULE
             = new DropwizardAppRule<BeamConfiguration>(BeamApplication.class, CONFIG_DIST_PATH);
 
-    //allow tests to accept SSL/HTTPS - without a cert
     @Before
-    public void setUpWithSSL(){
-        SslConfigurator sslConfigurator = SslConfigurator.newInstance()
-                .trustStoreFile(HTTPS_KEYSTORE)
-                .trustStorePassword(HTTPS_PASSWORD);
-
-        SSLContext sslContext = sslConfigurator.createSSLContext();
-        client = ClientBuilder.newBuilder() //add ssl context to client
-                .sslContext(sslContext)
-                .build();
+    public void setUp(){
+        setUpWithSSL();
+        //setUpWithoutSSL();
     }
-
-
-
-// client without SSL configuration & context
-//    @Before
-//    public void setUpWithoutSSL(){
-//        client = ClientBuilder.newClient();
-//    }
 
     @After
     public void tearDown(){
@@ -101,5 +82,21 @@ public class AuthIntegrationTest {
         assertEquals(expectedText, responseText);
     }
 
+    //allow tests to accept SSL/HTTPS - without a cert
+    private void setUpWithSSL(){
+        SslConfigurator sslConfigurator = SslConfigurator.newInstance()
+                .trustStoreFile(HTTPS_KEYSTORE)
+                .trustStorePassword(HTTPS_PASSWORD);
 
+        SSLContext sslContext = sslConfigurator.createSSLContext();
+        client = ClientBuilder.newBuilder() //add ssl context to client
+                .sslContext(sslContext)
+                .build();
+    }
+
+
+    //client without SSL configuration & context
+    private void setUpWithoutSSL(){
+        client = ClientBuilder.newClient();
+    }
 }

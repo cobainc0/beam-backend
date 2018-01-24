@@ -2,9 +2,8 @@ package com.cobainc0.beam;
 
 import com.cobainc0.beam.auth.BeamAuthenticator;
 import com.cobainc0.beam.auth.BeamAuthoriser;
+import com.cobainc0.beam.core.VendorDAO;
 import com.cobainc0.beam.core.User;
-import com.cobainc0.beam.core.Vendor;
-import com.cobainc0.beam.core.VendorDA0;
 import com.cobainc0.beam.resources.BeamResource;
 import com.cobainc0.beam.resources.VendorResource;
 import io.dropwizard.Application;
@@ -13,11 +12,11 @@ import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
-import io.dropwizard.db.PooledDataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,19 +24,6 @@ import org.slf4j.LoggerFactory;
 public class BeamApplication extends Application<BeamConfiguration> {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BeamApplication.class);
-
-    //hibernate bundle
-    private final HibernateBundle<BeamConfiguration> hibernateBundle = new HibernateBundle<BeamConfiguration>(
-            //pass all entity classes
-            Vendor.class,
-            User.class
-    ) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(BeamConfiguration configuration) {
-            return configuration.getDataSourceFactory();
-        }
-    };
-
 
     public BeamApplication(){}
 
@@ -66,7 +52,6 @@ public class BeamApplication extends Application<BeamConfiguration> {
                         new EnvironmentVariableSubstitutor(false)
                 )
         );
-        bootstrap.addBundle(hibernateBundle);
 
     }
 
@@ -100,10 +85,11 @@ public class BeamApplication extends Application<BeamConfiguration> {
                 .jersey()
                 .register(new AuthValueFactoryProvider.Binder<User>(User.class));
 
-        final VendorDA0 vendorDA0 = new VendorDA0(hibernateBundle.getSessionFactory());
-        environment
-                .jersey()
-                .register(new VendorResource(vendorDA0));
+        //use JDBI instead of hibernate
+        final DBIFactory factory = new DBIFactory();
+        final DBI jdbi = factory.build(environment, appConfig.getDataSourceFactory(), "mysql");
+        final VendorDAO vendorDA0 = jdbi.onDemand(VendorDAO.class);
+        environment.jersey().register(new VendorResource(vendorDA0));
     }
         //debugging - throw new BeamException("MSG: BEAM EXCEPTION", new Throwable("CAUSE: BEAM CAUSE"));
 }

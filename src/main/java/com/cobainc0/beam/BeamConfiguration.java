@@ -48,12 +48,6 @@ public class BeamConfiguration extends Configuration {
         this.password = password;
     }
 
-    //dataSourceFactory
-//    @JsonProperty
-//    public String getPassword() {
-//        return password;
-//    }
-
     @JsonProperty
     public String getAppName() {
         return this.appName;
